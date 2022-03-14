@@ -21,12 +21,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: myTextTheme,
         colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: primaryColor,
+              primary: secondaryColor,
               onPrimary: Colors.black,
               secondary: secondaryColor,
             ),
         appBarTheme: const AppBarTheme(
           elevation: 0,
+          centerTitle: true,
+          backgroundColor: Colors.white,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> {
                             style:
                                 Theme.of(context).textTheme.headline5!.copyWith(
                                       color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
                           ),
                           Text(
