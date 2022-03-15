@@ -28,10 +28,7 @@ class ListRestaurantPage extends StatelessWidget {
               arguments: restaurant,
             );
           },
-          child: Hero(
-            tag: restaurant.id!,
-            child: CardRestaurant(restaurant: restaurant),
-          ),
+          child: CardRestaurant(restaurant: restaurant),
         );
       },
     );

@@ -26,9 +26,12 @@ class RestaurantDetailPage extends StatelessWidget {
             height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                restaurant.pictureId!,
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: restaurant.pictureId!,
+                child: Image.network(
+                  restaurant.pictureId!,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

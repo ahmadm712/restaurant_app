@@ -25,11 +25,14 @@ class CardRestaurant extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              restaurant.pictureId!,
-              height: 100,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            child: Hero(
+              tag: restaurant.pictureId!,
+              child: Image.network(
+                restaurant.pictureId!,
+                height: 100,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(
