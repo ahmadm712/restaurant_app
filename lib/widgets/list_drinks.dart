@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/common/style.dart';
-import 'package:restaurant_app/data/models/restaurant.dart';
+import 'package:restaurant_app/data/models/restaurant_api_model.dart';
 
 class ListDrinks extends StatelessWidget {
   const ListDrinks({
     Key? key,
-    required this.restaurant,
+    required this.drinks,
   }) : super(key: key);
 
-  final Restaurants restaurant;
+  final List<Category> drinks;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +22,13 @@ class ListDrinks extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(top: 8, bottom: 16),
       child: ListView.separated(
-        itemCount: restaurant.menus!.drinks!.length,
+        itemCount: drinks.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) {
-          final Drinks drink = restaurant.menus!.drinks![index];
+          final drink = drinks[index];
           return ListTile(
             leading: Text(
-              drink.name!,
+              drink.name,
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!

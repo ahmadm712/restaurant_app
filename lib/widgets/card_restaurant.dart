@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:restaurant_app/data/models/restaurant.dart';
+import 'package:restaurant_app/data/api/api_services.dart';
+
+import 'package:restaurant_app/data/models/restaurant_api_model.dart';
 
 class CardRestaurant extends StatelessWidget {
-  const CardRestaurant({
+  CardRestaurant({
     Key? key,
     required this.restaurant,
   }) : super(key: key);
 
-  final Restaurants restaurant;
+  final Restaurant restaurant;
 
+  static const String _smallResPic =
+      'https://restaurant-api.dicoding.dev/images/small/';
+  static const String _medResPic =
+      'https://restaurant-api.dicoding.dev/images/medium/';
+  static const String _largeResPic =
+      'https://restaurant-api.dicoding.dev/images/large/';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,9 +34,9 @@ class CardRestaurant extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Hero(
-              tag: restaurant.pictureId!,
+              tag: restaurant.pictureId,
               child: Image.network(
-                restaurant.pictureId!,
+                _medResPic + restaurant.pictureId,
                 height: 100,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -39,7 +47,7 @@ class CardRestaurant extends StatelessWidget {
             height: 4,
           ),
           Text(
-            restaurant.name!,
+            restaurant.name,
             style: Theme.of(context).textTheme.headline6,
           ),
           const SizedBox(
@@ -49,14 +57,14 @@ class CardRestaurant extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                restaurant.city!,
+                restaurant.city,
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               const SizedBox(
                 width: 8,
               ),
               RatingBar.builder(
-                initialRating: restaurant.rating!,
+                initialRating: restaurant.rating,
                 minRating: 1,
                 direction: Axis.horizontal,
                 allowHalfRating: true,

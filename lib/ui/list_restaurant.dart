@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
-import 'package:restaurant_app/data/models/restaurant.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/common/common.dart';
+
+import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restaurant_app/providers/restaurants_provider.dart';
 import 'package:restaurant_app/ui/restaurant_detail_page.dart';
 import 'package:restaurant_app/widgets/card_restaurant.dart';
 
 class ListRestaurantPage extends StatelessWidget {
-  const ListRestaurantPage({
-    Key? key,
-    required this.restaurants,
-  }) : super(key: key);
-
-  final List restaurants;
+  final List<Restaurant> listRestaurant;
+  const ListRestaurantPage({Key? key, required this.listRestaurant})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +19,9 @@ class ListRestaurantPage extends StatelessWidget {
       scrollDirection: Axis.vertical,
       physics: const ScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: restaurants.length,
+      itemCount: listRestaurant.length,
       itemBuilder: (context, index) {
-        final Restaurants restaurant = restaurants[index];
+        final restaurant = listRestaurant[index];
         return GestureDetector(
           onTap: () {
             Navigator.pushNamed(
@@ -32,5 +34,6 @@ class ListRestaurantPage extends StatelessWidget {
         );
       },
     );
+    ;
   }
 }
