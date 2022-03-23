@@ -20,8 +20,6 @@ class ApiServices {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      log('data berhasil di ambil');
-      log(response.body.toString());
       return RestaurantList.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load List Restaurants');

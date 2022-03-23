@@ -120,7 +120,6 @@ class MainPage extends StatelessWidget {
                   itemCount: state.restaurant.restaurants.length,
                   itemBuilder: (context, index) {
                     final restaurant = state.restaurant.restaurants[index];
-                    log(restaurant.id);
                     return GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(
