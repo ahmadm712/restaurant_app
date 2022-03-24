@@ -38,7 +38,8 @@ class RestaurantsProvider extends ChangeNotifier {
     } catch (e) {
       _state = ResultState.Error;
       notifyListeners();
-      return _message = 'Error --> $e';
+      return _message =
+          'Terjadi gangguan. Periksa kembali koneksi internet anda';
     }
   }
 
@@ -64,7 +65,8 @@ class RestaurantsProvider extends ChangeNotifier {
     } catch (e) {
       _statePost = ResultStatePost.Error;
       notifyListeners();
-      return _message = 'Error --> $e';
+      return _message =
+          'Terjadi gangguan. Periksa kembali koneksi internet anda';
     }
   }
 }

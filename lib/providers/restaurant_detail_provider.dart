@@ -37,7 +37,8 @@ class RestaurantDetailProvider extends ChangeNotifier {
     } catch (e) {
       _state = ResultState.Error;
       notifyListeners();
-      return _message = 'Error --> $e';
+      return _message =
+          'Terjadi gangguan. Periksa kembali koneksi internet anda';
     }
   }
 }
