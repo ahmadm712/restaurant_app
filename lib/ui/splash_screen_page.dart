@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:restaurant_app/ui/home_page.dart';
+import 'package:restos/ui/home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   static const routeName = "/splash";
+
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -29,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
+        child: SizedBox(
             width: 70,
             height: 70,
             child: Lottie.asset('assets/images/lottie.json')),

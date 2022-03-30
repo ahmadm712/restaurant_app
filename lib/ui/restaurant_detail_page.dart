@@ -1,30 +1,23 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/common/common.dart';
-import 'package:restaurant_app/common/style.dart';
-import 'package:restaurant_app/data/api/api_services.dart';
+import 'package:restos/common/common.dart';
+import 'package:restos/common/style.dart';
+import 'package:restos/data/api/api_services.dart';
 
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
-import 'package:restaurant_app/providers/restaurant_detail_provider.dart';
-import 'package:restaurant_app/providers/restaurants_provider.dart';
-import 'package:restaurant_app/widgets/list_customer_review.dart';
-import 'package:restaurant_app/widgets/list_drinks.dart';
-import 'package:restaurant_app/widgets/list_food.dart';
+import 'package:restos/providers/restaurant_detail_provider.dart';
+import 'package:restos/providers/restaurants_provider.dart';
+import 'package:restos/widgets/list_customer_review.dart';
+import 'package:restos/widgets/list_drinks.dart';
+import 'package:restos/widgets/list_food.dart';
 
 class RestaurantDetailPage extends StatefulWidget {
   static const routeName = "/detail_page";
   final String id;
-  RestaurantDetailPage({required this.id});
+  const RestaurantDetailPage({required this.id});
 
-  static const String _smallResPic =
-      'https://restaurant-api.dicoding.dev/images/small/';
   static const String _medResPic =
       'https://restaurant-api.dicoding.dev/images/medium/';
-  static const String _largeResPic =
-      'https://restaurant-api.dicoding.dev/images/large/';
 
   @override
   State<RestaurantDetailPage> createState() => _RestaurantDetailPageState();
@@ -34,7 +27,8 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController reviewController = TextEditingController();
 
-  GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  bool isFav = false;
 
   bool validateAndSave() {
     final form = _globalKey.currentState;
@@ -77,14 +71,17 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
         ),
         body: Consumer<RestaurantDetailProvider>(
           builder: (context, state, _) {
-            if (state.state == ResultState.Loading) {
+            if (state.state == ResultState.loading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
               );
-            } else if (state.state == ResultState.HasData) {
+            } else if (state.state == ResultState.hasData) {
               var restaurant = state.result.restaurant;
               return ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 children: [
                   Container(
                     width: double.infinity,
@@ -109,11 +106,15 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                         ),
                   ),
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    margin: const EdgeInsets.only(top: 8, bottom: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(restaurant.city),
+                        Text(restaurant.city,
+                            style:
+                                Theme.of(context).textTheme.subtitle1!.copyWith(
+                                      color: secondaryColor,
+                                    )),
                         RatingBar.builder(
                           initialRating: restaurant.rating.toDouble(),
                           minRating: 1,
@@ -129,26 +130,28 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                             size: 8,
                           ),
                           updateOnDrag: false,
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
+                          onRatingUpdate: (rating) {},
                         )
                       ],
                     ),
                   ),
+                  Text(
+                    'Description Restaurant',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                   Container(
                     margin: const EdgeInsets.only(top: 16),
                     decoration: BoxDecoration(
-                        color: thridColor.withOpacity(0.8),
+                        color: thridColor.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(16)),
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(16),
                     width: double.infinity,
                     child: Text(
                       restaurant.description,
                       style: Theme.of(context).textTheme.subtitle1!.copyWith(
                             color: primaryColor,
                           ),
-                      textAlign: TextAlign.justify,
+                      textAlign: TextAlign.left,
                     ),
                   ),
                   Container(
@@ -200,30 +203,57 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                   ),
                   ListCustomerReview(restaurant: restaurant),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 16),
+                    margin: const EdgeInsets.symmetric(vertical: 16),
                     child: Column(
                       children: [
                         Container(
                           alignment: Alignment.bottomRight,
                           child: ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (isAddReview) {
-                                    isAddReview = false;
-                                  } else {
-                                    isAddReview = true;
-                                  }
-                                });
-                              },
-                              child: Text('Add Reviews')),
+                            onPressed: () {
+                              setState(() {
+                                if (isAddReview) {
+                                  isAddReview = false;
+                                } else {
+                                  isAddReview = true;
+                                }
+                              });
+                            },
+                            child: Text(
+                              isAddReview ? 'Hide Form' : 'Add Reviews',
+                              style: const TextStyle(
+                                color: primaryColor,
+                              ),
+                            ),
+                          ),
                         ),
                         isAddReview
                             ? Form(
                                 key: _globalKey,
                                 child: Container(
-                                  margin: EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 16,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: thridColor.withOpacity(0.85),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
+                                      Text(
+                                        'Reviews Form',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
+                                            .copyWith(color: primaryColor),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
                                       textField(
                                           controller: nameController,
                                           hint: 'Nama',
@@ -232,10 +262,8 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                                           controller: reviewController,
                                           hint: 'Review',
                                           icon: Icons.table_rows_rounded),
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            primary: secondaryColor,
-                                          ),
+                                      Center(
+                                        child: ElevatedButton(
                                           onPressed: () async {
                                             final function = Provider.of<
                                                         RestaurantsProvider>(
@@ -248,37 +276,35 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
 
                                             if (validateAndSave()) {
                                               if (await function) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        backgroundColor:
-                                                            Color(0xff496696),
-                                                        content: Text(
-                                                            'Reviews Succes di tambahkan silahkan reload halaman ini')));
+                                                showSnackbar(
+                                                    text:
+                                                        'Reviews Succes di tambahkan silahkan reload halaman ini',
+                                                    context: context,
+                                                    color: thridColor);
 
                                                 clearTextField();
                                                 setState(() {});
                                               } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        backgroundColor:
-                                                            Colors.red,
-                                                        content: Text(
-                                                            'Reviews Gagal di tambahkan')));
+                                                showSnackbar(
+                                                    text:
+                                                        'Reviews Gagal di tambahkan',
+                                                    context: context,
+                                                    color: Colors.red);
                                               }
                                             } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      backgroundColor:
-                                                          Color(0xFFA84F4C),
-                                                      content: Text(
-                                                          'Isi dengan benar')));
+                                              showSnackbar(
+                                                  text: 'Isi dengan benar',
+                                                  context: context,
+                                                  color: secondaryColor);
                                             }
-
-                                            ;
                                           },
                                           child: const Text(
                                             'Send Reviews',
-                                          )),
+                                            style:
+                                                TextStyle(color: primaryColor),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -289,10 +315,24 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                   )
                 ],
               );
-            } else if (state.state == ResultState.NoData) {
-              return Center(child: Text(state.message));
-            } else if (state.state == ResultState.Error) {
-              return Center(child: Text(state.message));
+            } else if (state.state == ResultState.noData) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Center(
+                    child: Text(
+                  state.message,
+                  textAlign: TextAlign.center,
+                )),
+              );
+            } else if (state.state == ResultState.error) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Center(
+                    child: Text(
+                  state.message,
+                  textAlign: TextAlign.center,
+                )),
+              );
             } else {
               return const Center(child: Text(''));
             }

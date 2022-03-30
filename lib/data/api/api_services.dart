@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'dart:developer';
 
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restos/data/models/restaurant_api_model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiServices {
-  static final String _baseUrl = 'https://restaurant-api.dicoding.dev';
-  static final String _list = '/list';
-  static final String _review = '/review';
-  static final String _detail = '/detail/';
+  static const String _baseUrl = 'https://restaurant-api.dicoding.dev';
+  static const String _list = '/list';
+  static const String _review = '/review';
+  static const String _detail = '/detail/';
 
   ///* Detail restaurant
   /// :id ;

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/common/common.dart';
-import 'package:restaurant_app/common/style.dart';
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restos/common/common.dart';
+import 'package:restos/common/style.dart';
+import 'package:restos/data/models/restaurant_api_model.dart';
 
-import 'package:restaurant_app/providers/restaurants_provider.dart';
-import 'package:restaurant_app/providers/restaurants_search_provider.dart';
-import 'package:restaurant_app/ui/list_restaurant.dart';
-import 'package:restaurant_app/ui/restaurant_detail_page.dart';
-import 'package:restaurant_app/widgets/card_restaurant.dart';
+import 'package:restos/providers/restaurants_search_provider.dart';
+import 'package:restos/ui/restaurant_detail_page.dart';
+import 'package:restos/widgets/card_restaurant.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -32,22 +30,21 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: secondaryColor.withOpacity(0.95),
+      backgroundColor: thridColor.withOpacity(0.95),
       body: ListView(
         children: [
           _textfield(),
-          Container(
-            margin: const EdgeInsets.only(top: 16),
-            height: MediaQuery.of(context).size.height,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.8,
             child: Consumer<RestaurantsSearchProvider>(
               builder: (context, state, _) {
-                if (state.state == ResultState.Loading) {
+                if (state.state == ResultState.loading) {
                   return const Center(
                     child: CircularProgressIndicator(
                       color: Colors.white,
                     ),
                   );
-                } else if (state.state == ResultState.HasData) {
+                } else if (state.state == ResultState.hasData) {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
                     physics: const ScrollPhysics(),
@@ -68,27 +65,31 @@ class _SearchPageState extends State<SearchPage> {
                       );
                     },
                   );
-                } else if (state.state == ResultState.NoData) {
-                  return Center(
-                    child: Text(
+                } else if (state.state == ResultState.noData) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Center(
+                        child: Text(
                       state.message,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
                           .subtitle1!
                           .copyWith(color: primaryColor),
-                    ),
+                    )),
                   );
-                } else if (state.state == ResultState.Error) {
-                  return Center(
-                    child: Text(
+                } else if (state.state == ResultState.error) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Center(
+                        child: Text(
                       state.message,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
                           .subtitle1!
                           .copyWith(color: primaryColor),
-                    ),
+                    )),
                   );
                 } else {
                   return const Center(

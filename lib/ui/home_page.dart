@@ -1,14 +1,17 @@
-import 'dart:developer';
-
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/common/common.dart';
-import 'package:restaurant_app/common/style.dart';
-import 'package:restaurant_app/data/api/api_services.dart';
-import 'package:restaurant_app/providers/restaurants_provider.dart';
-import 'package:restaurant_app/ui/restaurant_detail_page.dart';
-import 'package:restaurant_app/ui/search_page.dart';
-import 'package:restaurant_app/widgets/card_restaurant.dart';
+import 'package:restos/common/common.dart';
+import 'package:restos/common/style.dart';
+import 'package:restos/providers/restaurants_provider.dart';
+import 'package:restos/ui/restaurant_detail_page.dart';
+import 'package:restos/ui/search_page.dart';
+import 'package:restos/ui/settings.dart';
+import 'package:restos/utils/notification_helper.dart';
+import 'package:restos/widgets/card_restaurant.dart';
+
+import 'bookmarks_page.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = "/home";
@@ -19,11 +22,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final NotificationHelper _notificationHelper = NotificationHelper();
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(RestaurantDetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    selectNotificationSubject.close();
+    super.dispose();
+  }
+
   int _bottomNavIndex = 0;
 
   final List<Widget> _listWidget = [
     const MainPage(),
     const SearchPage(),
+    BookmarksPage(),
+    SettingPage()
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -34,6 +53,16 @@ class _HomePageState extends State<HomePage> {
     const BottomNavigationBarItem(
       icon: Icon(Icons.search),
       label: 'Search',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Platform.isIOS ? CupertinoIcons.square_favorites : Icons.favorite,
+      ),
+      label: 'Favorite',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.settings),
+      label: 'Settings',
     ),
   ];
   void _onBottomNavTapped(int index) {
@@ -69,9 +98,9 @@ class MainPage extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.only(bottom: 8),
           height: 200,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: primaryColor,
-              image: const DecorationImage(
+              image: DecorationImage(
                 fit: BoxFit.cover,
                 image: AssetImage(
                   'assets/images/background.jpg',
@@ -82,7 +111,7 @@ class MainPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 16),
                 child: Column(
                   children: [
                     Text(
@@ -106,12 +135,14 @@ class MainPage extends StatelessWidget {
         ),
         Consumer<RestaurantsProvider>(
           builder: (context, state, _) {
-            if (state.state == ResultState.Loading) {
+            if (state.state == ResultState.loading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
               );
-            } else if (state.state == ResultState.HasData) {
-              return Container(
+            } else if (state.state == ResultState.hasData) {
+              return SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -133,11 +164,11 @@ class MainPage extends StatelessWidget {
                   },
                 ),
               );
-            } else if (state.state == ResultState.NoData) {
+            } else if (state.state == ResultState.noData) {
               return Center(
                 child: Text(state.message),
               );
-            } else if (state.state == ResultState.Error) {
+            } else if (state.state == ResultState.error) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(

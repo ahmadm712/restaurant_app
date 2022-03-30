@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/common/style.dart';
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restos/common/style.dart';
+import 'package:restos/data/models/restaurant_api_model.dart';
 
 class ListCustomerReview extends StatelessWidget {
   const ListCustomerReview({
@@ -49,7 +48,7 @@ class ListCustomerReview extends StatelessWidget {
           );
         },
         separatorBuilder: (context, index) {
-          return Divider();
+          return const Divider();
         },
       ),
     );

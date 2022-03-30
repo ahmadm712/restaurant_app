@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:restaurant_app/common/common.dart';
-import 'package:restaurant_app/data/api/api_services.dart';
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restos/common/common.dart';
+import 'package:restos/data/api/api_services.dart';
+import 'package:restos/data/models/restaurant_api_model.dart';
 
 class RestaurantsSearchProvider extends ChangeNotifier {
   final ApiServices apiService;
@@ -23,22 +23,22 @@ class RestaurantsSearchProvider extends ChangeNotifier {
   Future<dynamic> fetchSearchRestaurant(String enteredWord) async {
     try {
       if (enteredWord.isNotEmpty) {
-        _state = ResultState.Loading;
+        _state = ResultState.loading;
         _enteredWord = enteredWord;
         notifyListeners();
         final restaurantSearch = await apiService.searchRestaurant(enteredWord);
         if (restaurantSearch.restaurants.isEmpty) {
-          _state = ResultState.NoData;
+          _state = ResultState.noData;
           notifyListeners();
           return _message = 'Empty Data';
         } else {
-          _state = ResultState.HasData;
+          _state = ResultState.hasData;
           notifyListeners();
           return _restaurantSearch = restaurantSearch;
         }
       }
     } catch (e) {
-      _state = ResultState.Error;
+      _state = ResultState.error;
       notifyListeners();
       return _message =
           'Terjadi gangguan. Periksa kembali koneksi internet anda';

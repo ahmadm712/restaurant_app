@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:restaurant_app/common/common.dart';
-import 'package:restaurant_app/data/api/api_services.dart';
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restos/common/common.dart';
+import 'package:restos/data/api/api_services.dart';
+import 'package:restos/data/models/restaurant_api_model.dart';
 
 class RestaurantDetailProvider extends ChangeNotifier {
   final ApiServices apiService;
@@ -22,20 +22,20 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   Future<dynamic> _fetchRestaurant(String id) async {
     try {
-      _state = ResultState.Loading;
+      _state = ResultState.loading;
       notifyListeners();
       final restaurantDetails = await apiService.getRestaurantDetail(id);
       if (restaurantDetails.error) {
-        _state = ResultState.NoData;
+        _state = ResultState.noData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
-        _state = ResultState.HasData;
+        _state = ResultState.hasData;
         notifyListeners();
         return _restaurantDetail = restaurantDetails;
       }
     } catch (e) {
-      _state = ResultState.Error;
+      _state = ResultState.error;
       notifyListeners();
       return _message =
           'Terjadi gangguan. Periksa kembali koneksi internet anda';

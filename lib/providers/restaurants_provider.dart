@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:restaurant_app/common/common.dart';
-import 'package:restaurant_app/data/api/api_services.dart';
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restos/common/common.dart';
+import 'package:restos/data/api/api_services.dart';
+import 'package:restos/data/models/restaurant_api_model.dart';
 
 class RestaurantsProvider extends ChangeNotifier {
   final ApiServices apiService;
@@ -10,7 +10,7 @@ class RestaurantsProvider extends ChangeNotifier {
   late ResultState _state;
   String _message = '';
 
-  late ResultStatePost _statePost;
+  late ResultState _statePost;
   String _messagePost = '';
 
   RestaurantsProvider({required this.apiService}) {
@@ -21,22 +21,25 @@ class RestaurantsProvider extends ChangeNotifier {
   RestaurantList get restaurant => _restaurantApi;
   ResultState get state => _state;
 
+  ResultState get statePost => _statePost;
+  String get messagePost => _messagePost;
+
   Future<dynamic> _fetchRestaurants() async {
     try {
-      _state = ResultState.Loading;
+      _state = ResultState.loading;
       notifyListeners();
       final restaurants = await apiService.fetchListRestaurants();
       if (restaurants.restaurants.isEmpty) {
-        _state = ResultState.NoData;
+        _state = ResultState.noData;
         notifyListeners();
         return _message = 'Empty Data';
       } else {
-        _state = ResultState.HasData;
+        _state = ResultState.hasData;
         notifyListeners();
         return _restaurantApi = restaurants;
       }
     } catch (e) {
-      _state = ResultState.Error;
+      _state = ResultState.error;
       notifyListeners();
       return _message =
           'Terjadi gangguan. Periksa kembali koneksi internet anda';
@@ -46,7 +49,7 @@ class RestaurantsProvider extends ChangeNotifier {
   Future<dynamic> createCustomerReview(
       String id, String name, String review) async {
     try {
-      _statePost = ResultStatePost.Loading;
+      _statePost = ResultState.loading;
       notifyListeners();
       final restaurants = await apiService.createCustomerReview(
         id: id,
@@ -54,18 +57,18 @@ class RestaurantsProvider extends ChangeNotifier {
         review: review,
       );
       if (restaurants) {
-        _statePost = ResultStatePost.Succes;
+        _statePost = ResultState.hasData;
         notifyListeners();
         return restaurants;
       } else {
-        _statePost = ResultStatePost.NoData;
+        _statePost = ResultState.noData;
         notifyListeners();
-        return _message = 'Empty Data';
+        return _messagePost = 'Empty Data';
       }
     } catch (e) {
-      _statePost = ResultStatePost.Error;
+      _statePost = ResultState.error;
       notifyListeners();
-      return _message =
+      return _messagePost =
           'Terjadi gangguan. Periksa kembali koneksi internet anda';
     }
   }

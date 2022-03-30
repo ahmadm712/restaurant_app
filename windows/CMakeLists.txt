@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(restaurant_app LANGUAGES CXX)
+project(restos LANGUAGES CXX)
 
-set(BINARY_NAME "restaurant_app")
+set(BINARY_NAME "restos")
 
 cmake_policy(SET CMP0063 NEW)
 

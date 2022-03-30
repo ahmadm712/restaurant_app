@@ -1,4 +1,4 @@
-# restaurant_app
+# restos
 
 A new Flutter project.
 

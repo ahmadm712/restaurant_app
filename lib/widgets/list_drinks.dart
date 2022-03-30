@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/common/style.dart';
-import 'package:restaurant_app/data/models/restaurant_api_model.dart';
+import 'package:restos/common/style.dart';
+import 'package:restos/data/models/restaurant_api_model.dart';
 
 class ListDrinks extends StatelessWidget {
   const ListDrinks({
@@ -15,7 +14,7 @@ class ListDrinks extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: thridColor.withOpacity(0.8),
+        color: thridColor.withOpacity(0.85),
         borderRadius: BorderRadius.circular(8),
       ),
       height: MediaQuery.of(context).size.height * 0.4,
@@ -37,7 +36,7 @@ class ListDrinks extends StatelessWidget {
           );
         },
         separatorBuilder: (context, index) {
-          return Divider();
+          return const Divider();
         },
       ),
     );
