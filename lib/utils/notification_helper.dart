@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:math';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:restos/common/navigation.dart';
 import 'package:restos/data/models/restaurant_api_model.dart';
@@ -33,7 +33,7 @@ class NotificationHelper {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String? payload) async {
       if (payload != null) {
-        log('notification payload: ' + payload);
+        print('notification payload: ' + payload);
       }
       selectNotificationSubject.add(payload ?? 'empty payload');
     });
@@ -57,22 +57,16 @@ class NotificationHelper {
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
-
+    var randomRestaurant = Random().nextInt(restaurants.restaurants.length - 1);
     var titleNotification = "<b>Recomended Restaurants Today</b>";
-    late String titleNews;
-    for (var title in restaurants.restaurants) {
-      titleNews = title.name;
-      break;
-    }
+    var titleNews = restaurants.restaurants[randomRestaurant].name;
 
     await flutterLocalNotificationsPlugin.show(
       0,
       titleNotification,
       titleNews,
       platformChannelSpecifics,
-      payload: json.encode(
-        restaurants.toJson(),
-      ),
+      payload: json.encode(restaurants.restaurants[randomRestaurant].toJson()),
     );
   }
 
@@ -81,7 +75,7 @@ class NotificationHelper {
       (String payload) async {
         var data = RestaurantList.fromJson(json.decode(payload));
         var restaurant = data.restaurants[0].id;
-        log(restaurant);
+        print(restaurant);
         Navigation.intentWithData(route, restaurant);
       },
     );
